@@ -25,7 +25,6 @@ namespace Proyecto_Administracion_Hotel
             CargarTiposHabitacion();
             CargarHabitaciones();
         }
-        // 1. Método para llenar el ComboBox de Tipos desde SQLite
         private void CargarTiposHabitacion()
         {
             using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
@@ -38,10 +37,10 @@ namespace Proyecto_Administracion_Hotel
                     DataTable dt = new DataTable();
                     adaptador.Fill(dt);
 
-                    // Conectamos el ComboBox a la tabla
+                   
                     cmbTipo.DataSource = dt;
-                    cmbTipo.DisplayMember = "NombreTipo"; // Esto es lo que lee el usuario (Ej: "Suite")
-                    cmbTipo.ValueMember = "IdTipoHabitacion"; // Esto es el número oculto que guardaremos (Ej: 3)
+                    cmbTipo.DisplayMember = "NombreTipo"; 
+                    cmbTipo.ValueMember = "IdTipoHabitacion";
                 }
                 catch (Exception ex)
                 {
@@ -50,7 +49,7 @@ namespace Proyecto_Administracion_Hotel
             }
         }
 
-        // 2. Método para mostrar todas las habitaciones en el DataGridView
+       
         private void CargarHabitaciones()
         {
             using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
@@ -58,7 +57,7 @@ namespace Proyecto_Administracion_Hotel
                 try
                 {
                     conexion.Open();
-                    // Hacemos un JOIN para que la tabla muestre el nombre del tipo y no solo un número
+          
                     string query = @"SELECT h.IdHabitacion, h.NumeroHabitacion, t.NombreTipo, h.Estado 
                                      FROM Habitaciones h
                                      INNER JOIN TiposHabitacion t ON h.IdTipoHabitacion = t.IdTipoHabitacion";
@@ -81,13 +80,11 @@ namespace Proyecto_Administracion_Hotel
             {
                 DataGridViewRow fila = dgvHabitaciones.Rows[e.RowIndex];
 
-                // Guardamos el ID de la habitación seleccionada
                 idHabitacionSeleccionada = Convert.ToInt32(fila.Cells["IdHabitacion"].Value);
 
-                // Llenamos los controles con los datos de la fila
                 txtNumero.Text = fila.Cells["NumeroHabitacion"].Value.ToString();
 
-                // Al asignarle el texto al ComboBox, este buscará y seleccionará la opción correcta automáticamente
+       
                 cmbTipo.Text = fila.Cells["NombreTipo"].Value.ToString();
                 cmbEstado.Text = fila.Cells["Estado"].Value.ToString();
             }
@@ -110,7 +107,6 @@ namespace Proyecto_Administracion_Hotel
 
                     using (SQLiteCommand comando = new SQLiteCommand(query, conexion))
                     {
-                        // Extraemos el ID oculto del tipo de habitación seleccionado en el ComboBox
                         comando.Parameters.AddWithValue("@idTipo", Convert.ToInt32(cmbTipo.SelectedValue));
                         comando.Parameters.AddWithValue("@numero", txtNumero.Text);
                         comando.Parameters.AddWithValue("@estado", cmbEstado.Text);
@@ -119,12 +115,11 @@ namespace Proyecto_Administracion_Hotel
                         MessageBox.Show("Habitación guardada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         LimpiarCampos();
-                        CargarHabitaciones(); // Refrescamos la tabla
+                        CargarHabitaciones(); 
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Si el número de habitación ya existe, SQLite lanzará un error por la restricción UNIQUE
                     MessageBox.Show("Error al guardar. Es posible que este número de habitación ya exista. Detalles: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -212,10 +207,10 @@ namespace Proyecto_Administracion_Hotel
         private void LimpiarCampos()
         {
             txtNumero.Clear();
-            cmbTipo.SelectedIndex = -1; // Deselecciona el tipo
-            cmbEstado.SelectedIndex = -1; // Deselecciona el estado
-            idHabitacionSeleccionada = 0; // Reinicia el ID
-            txtNumero.Focus(); // Pone el cursor en el TextBox del número
+            cmbTipo.SelectedIndex = -1; 
+            cmbEstado.SelectedIndex = -1; 
+            idHabitacionSeleccionada = 0; 
+            txtNumero.Focus(); 
         }
     }
 }

@@ -16,11 +16,9 @@ namespace Proyecto_Administracion_Hotel
        
             string cadenaConexion = "Data Source=HotelDB.db;Version=3;";
 
-        // Variables para guardar quién está haciendo la reserva
         private int idEmpleadoActual;
         private string nombreEmpleadoActual;
 
-        // Modificamos el constructor para recibir al empleado
         public FrmReservaciones(int idEmpleado, string nombreEmpleado)
         {
             InitializeComponent();
@@ -29,14 +27,11 @@ namespace Proyecto_Administracion_Hotel
         }
         private void FrmReservaciones_Load(object sender, EventArgs e)
         {
-            // Mostramos el nombre del empleado en el TextBox de Solo Lectura
             txtEmpleadoActual.Text = nombreEmpleadoActual;
 
-            // Configuramos las fechas (Mínimo hoy, Check-Out mañana por defecto)
             dtpFechaCheckIn.MinDate = DateTime.Today;
             dtpFechaCheckOut.MinDate = DateTime.Today.AddDays(1);
 
-            // Cargamos los datos de la base de datos
             CargarClientes();
             CargarHabitacionesDisponibles();
             CargarReservacionesActivas();
@@ -49,7 +44,6 @@ namespace Proyecto_Administracion_Hotel
                 try
                 {
                     conexion.Open();
-                    // Concatenamos Nombre y Apellidos para que se vea bien en el menú desplegable
                     string query = "SELECT IdCliente, Nombre || ' ' || Apellidos AS NombreCompleto FROM Clientes";
                     SQLiteDataAdapter adaptador = new SQLiteDataAdapter(query, conexion);
                     DataTable dt = new DataTable();
@@ -58,7 +52,7 @@ namespace Proyecto_Administracion_Hotel
                     cmbCliente.DataSource = dt;
                     cmbCliente.DisplayMember = "NombreCompleto";
                     cmbCliente.ValueMember = "IdCliente";
-                    cmbCliente.SelectedIndex = -1; // Lo dejamos en blanco por defecto
+                    cmbCliente.SelectedIndex = -1; 
                 }
                 catch (Exception ex) { MessageBox.Show("Error al cargar clientes: " + ex.Message); }
             }
@@ -71,7 +65,6 @@ namespace Proyecto_Administracion_Hotel
                 try
                 {
                     conexion.Open();
-                    // Solo traemos las habitaciones con estado 'Disponible'
                     string query = @"SELECT h.IdHabitacion, h.NumeroHabitacion || ' - ' || t.NombreTipo AS Descripcion 
                                      FROM Habitaciones h
                                      INNER JOIN TiposHabitacion t ON h.IdTipoHabitacion = t.IdTipoHabitacion
@@ -116,7 +109,6 @@ namespace Proyecto_Administracion_Hotel
 
         private void btnCrearReserva_Click(object sender, EventArgs e)
         {
-            // 1. Validaciones
             if (cmbCliente.SelectedValue == null || cmbHabitacion.SelectedValue == null)
             {
                 MessageBox.Show("Por favor, seleccione un cliente y una habitación.", "Faltan datos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -129,13 +121,11 @@ namespace Proyecto_Administracion_Hotel
                 return;
             }
 
-            // 2. Extraer datos
             int idCliente = Convert.ToInt32(cmbCliente.SelectedValue);
             int idHabitacion = Convert.ToInt32(cmbHabitacion.SelectedValue);
             string fechaIn = dtpFechaCheckIn.Value.ToString("yyyy-MM-dd");
             string fechaOut = dtpFechaCheckOut.Value.ToString("yyyy-MM-dd");
 
-            // 3. Transacción SQL (Para asegurar que se hagan ambas cosas o ninguna)
             using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
             {
                 try
@@ -143,7 +133,6 @@ namespace Proyecto_Administracion_Hotel
                     conexion.Open();
                     using (SQLiteTransaction transaccion = conexion.BeginTransaction())
                     {
-                        // Paso A: Insertar la Reservación
                         string queryReserva = @"INSERT INTO Reservaciones (IdCliente, IdHabitacion, IdEmpleado, FechaCheckIn, FechaCheckOut, EstadoReserva) 
                                                 VALUES (@cliente, @habitacion, @empleado, @checkin, @checkout, 'Activa')";
                         using (SQLiteCommand cmdReserva = new SQLiteCommand(queryReserva, conexion, transaccion))
@@ -156,7 +145,6 @@ namespace Proyecto_Administracion_Hotel
                             cmdReserva.ExecuteNonQuery();
                         }
 
-                        // Paso B: Actualizar la habitación a 'Ocupada'
                         string queryHabitacion = "UPDATE Habitaciones SET Estado = 'Ocupada' WHERE IdHabitacion = @habitacion";
                         using (SQLiteCommand cmdHabitacion = new SQLiteCommand(queryHabitacion, conexion, transaccion))
                         {
@@ -164,13 +152,11 @@ namespace Proyecto_Administracion_Hotel
                             cmdHabitacion.ExecuteNonQuery();
                         }
 
-                        // Si todo sale bien, guardamos los cambios definitivamente
                         transaccion.Commit();
                         MessageBox.Show("Check-In realizado con éxito. La habitación ahora está Ocupada.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Refrescar la pantalla
                         btnLimpiar_Click(null, null);
-                        CargarHabitacionesDisponibles(); // Actualizamos el combo para que desaparezca la que acabamos de rentar
+                        CargarHabitacionesDisponibles(); 
                         CargarReservacionesActivas();
                     }
                 }

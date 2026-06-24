@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Proyecto_Administracion_Hotel.Modelos; // Para usar tu clase Cliente
+using Proyecto_Administracion_Hotel.Modelos; 
 using System.Data.SQLite;
 
 namespace Proyecto_Administracion_Hotel
@@ -15,7 +15,6 @@ namespace Proyecto_Administracion_Hotel
     public partial class FrmClientes : Form
     {
 
-        // Misma cadena de conexión que usamos en el Login
         string cadenaConexion = "Data Source=HotelDB.db;Version=3;";
 
         int idClienteSeleccionado = 0;
@@ -25,12 +24,10 @@ namespace Proyecto_Administracion_Hotel
             InitializeComponent();
         }
 
-        // Este evento ocurre al abrir la ventana
         private void FrmClientes_Load(object sender, EventArgs e)
         {
             CargarClientes();
         }
-        // 1. Método para LEER (Read) los clientes y mostrarlos en la tabla
         private void CargarClientes()
         {
             using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
@@ -51,7 +48,6 @@ namespace Proyecto_Administracion_Hotel
             }
         }
 
-        // 2. Evento para GUARDAR (Create) un nuevo cliente
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtName.Text) || string.IsNullOrWhiteSpace(txtApellidos.Text))
@@ -60,7 +56,6 @@ namespace Proyecto_Administracion_Hotel
                 return;
             }
 
-            // Usamos la clase Cliente que creaste gracias a la herencia
             Cliente nuevoCliente = new Cliente()
             {
                 Nombre = txtName.Text,
@@ -83,11 +78,11 @@ namespace Proyecto_Administracion_Hotel
                         comando.Parameters.AddWithValue("@telefono", nuevoCliente.Telefono);
                         comando.Parameters.AddWithValue("@correo", nuevoCliente.Correo);
 
-                        comando.ExecuteNonQuery(); // Ejecuta la inserción
+                        comando.ExecuteNonQuery(); 
                         MessageBox.Show("Cliente guardado con éxito.");
 
                         LimpiarCampos();
-                        CargarClientes(); // Refresca la tabla
+                        CargarClientes(); 
                     }
                 }
                 catch (Exception ex)
@@ -97,7 +92,6 @@ namespace Proyecto_Administracion_Hotel
             }
         }
 
-        // Método auxiliar para vaciar los TextBox
         private void LimpiarCampos()
         {
             txtName.Clear();
@@ -109,16 +103,12 @@ namespace Proyecto_Administracion_Hotel
 
         private void dgvClientes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Verificamos que se haya hecho clic en una fila válida (y no en los títulos de arriba)
             if (e.RowIndex >= 0)
             {
-                // Obtenemos la fila seleccionada
                 DataGridViewRow fila = dgvClientes.Rows[e.RowIndex];
 
-                // Guardamos el ID (la primera columna, índice 0) en nuestra variable
                 idClienteSeleccionado = Convert.ToInt32(fila.Cells[0].Value);
 
-                // Pasamos los datos a los TextBox
                 txtName.Text = fila.Cells["Nombre"].Value.ToString();
                 txtApellidos.Text = fila.Cells["Apellidos"].Value.ToString();
                 txtTelefono.Text = fila.Cells["Telefono"].Value.ToString();
@@ -139,7 +129,6 @@ namespace Proyecto_Administracion_Hotel
                 try
                 {
                     conexion.Open();
-                    // Consulta de actualización usando WHERE para no afectar a los demás
                     string query = "UPDATE Clientes SET Nombre = @nombre, Apellidos = @apellidos, Telefono = @telefono, Correo = @correo WHERE IdCliente = @id";
 
                     using (SQLiteCommand comando = new SQLiteCommand(query, conexion))
@@ -148,14 +137,14 @@ namespace Proyecto_Administracion_Hotel
                         comando.Parameters.AddWithValue("@apellidos", txtApellidos.Text);
                         comando.Parameters.AddWithValue("@telefono", txtTelefono.Text);
                         comando.Parameters.AddWithValue("@correo", txtCorreo.Text);
-                        comando.Parameters.AddWithValue("@id", idClienteSeleccionado); // Usamos el ID que guardamos en el clic
+                        comando.Parameters.AddWithValue("@id", idClienteSeleccionado); 
 
                         comando.ExecuteNonQuery();
                         MessageBox.Show("Cliente actualizado con éxito.");
 
                         LimpiarCampos();
-                        idClienteSeleccionado = 0; // Reiniciamos la selección
-                        CargarClientes(); // Refrescamos la tabla
+                        idClienteSeleccionado = 0; 
+                        CargarClientes(); 
                     }
                 }
                 catch (Exception ex)
@@ -173,7 +162,6 @@ namespace Proyecto_Administracion_Hotel
                 return;
             }
 
-            // Pedimos confirmación antes de borrar por seguridad
             DialogResult respuesta = MessageBox.Show("¿Está seguro de que desea eliminar a este cliente?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (respuesta == DialogResult.Yes)
@@ -199,7 +187,6 @@ namespace Proyecto_Administracion_Hotel
                     }
                     catch (Exception ex)
                     {
-                        // Un error común al borrar es que el cliente ya tenga una reservación (Llave Foránea)
                         MessageBox.Show("Error al eliminar. Es posible que este cliente tenga reservaciones asociadas. Detalles: " + ex.Message);
                     }
                 }
@@ -209,7 +196,7 @@ namespace Proyecto_Administracion_Hotel
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
-            idClienteSeleccionado = 0; // Deseleccionamos al cliente actual
+            idClienteSeleccionado = 0; 
         }
 
        

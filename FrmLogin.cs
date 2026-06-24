@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-// 1. Agregamos esta línea arriba del todo para poder usar SQLite
 using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
@@ -16,8 +15,7 @@ namespace Proyecto_Administracion_Hotel
     public partial class FrmLogin : Form
     {
 
-        // 2. Definimos la cadena de conexión apuntando al archivo que pegaste en la carpeta Debug
-        // Asegúrate de poner el nombre exacto de tu archivo.
+
         string cadenaConexion = "Data Source=HotelDB.db;Version=3;";
         public FrmLogin()
         {
@@ -27,47 +25,40 @@ namespace Proyecto_Administracion_Hotel
         
             private void btnIngresar_Click(object sender, EventArgs e)
         {
-            // Validamos que no dejen los campos en blanco
             if (string.IsNullOrWhiteSpace(txtUsuario.Text) || string.IsNullOrWhiteSpace(txtContraseña.Text))
             {
                 MessageBox.Show("Por favor, ingrese su usuario y contraseña.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 3. Iniciamos la conexión a la base de datos
             using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
             {
                 try
                 {
                     conexion.Open();
-                    // 4. Preparamos la consulta SQL. Buscamos al empleado y pedimos su IdRol
                     string query = "SELECT IdRol, Nombre, Apellidos FROM Empleados WHERE Usuario = @usuario AND Contrasena = @contrasena";
 
                     using (SQLiteCommand comando = new SQLiteCommand(query, conexion))
                     {
-                        // Usamos parámetros (@) por seguridad, para evitar inyección SQL
                         comando.Parameters.AddWithValue("@usuario", txtUsuario.Text);
                         comando.Parameters.AddWithValue("@contrasena", txtContraseña.Text);
 
                         using (SQLiteDataReader lector = comando.ExecuteReader())
                         {
-                            if (lector.Read())  // Si Read() es verdadero, significa que encontró un registro
+                            if (lector.Read())  
                             {
                                 int idRol = Convert.ToInt32(lector["IdRol"]);
                                 string nombreCompleto = lector["Nombre"].ToString() + " " + lector["Apellidos"].ToString();
 
                                 MessageBox.Show("Bienvenido, " + nombreCompleto, "Acceso concedido", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                                // 5. Abrimos el Menú Principal y le pasamos el Nivel de Acceso y el Nombre
                                 FrmPrincipal menu = new FrmPrincipal(idRol, nombreCompleto);
                                 menu.Show();
 
-                                // Ocultamos la ventana de Login
                                 this.Hide();
                             }
                             else
                             {
-                                // Limpiamos la contraseña para que intente de nuevo
                                 MessageBox.Show("Usuario o contraseña incorrectos.", "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 txtContraseña.Clear();
                                 txtUsuario.Focus();
