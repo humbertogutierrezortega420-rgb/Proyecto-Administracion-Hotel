@@ -15,9 +15,15 @@ namespace Proyecto_Administracion_Hotel
         private int rolUsuario;
         private string nombreUsuario;
 
+
+        public FrmPrincipal()
+        {
+            InitializeComponent();
+        }
         public FrmPrincipal(int idRol, string nombre)
         {
             InitializeComponent();
+
 
             this.rolUsuario = idRol;
             this.nombreUsuario = nombre;
@@ -89,6 +95,17 @@ namespace Proyecto_Administracion_Hotel
                 frmReserva.MdiParent = this;
                 frmReserva.Show();
             }
+        }
+
+        private void submenuConsumos_Click(object sender, EventArgs e)
+        {
+            AbrirFormularioHijo<FrmConsumos>();
+        }
+
+        private void submenuCheckOut_Click(object sender, EventArgs e)
+        {
+            AbrirFormularioHijo<FrmFacturacion>();
+
         }
     }
 }

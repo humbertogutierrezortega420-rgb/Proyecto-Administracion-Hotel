@@ -49,7 +49,6 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuRecepcion,
@@ -58,7 +57,8 @@
             this.menuAdmin});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1200, 35);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
+            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -68,21 +68,22 @@
             this.submenuCheckIn,
             this.submenuCheckOut});
             this.menuRecepcion.Name = "menuRecepcion";
-            this.menuRecepcion.Size = new System.Drawing.Size(108, 29);
+            this.menuRecepcion.Size = new System.Drawing.Size(74, 22);
             this.menuRecepcion.Text = "Recepción";
             // 
             // submenuCheckIn
             // 
             this.submenuCheckIn.Name = "submenuCheckIn";
-            this.submenuCheckIn.Size = new System.Drawing.Size(270, 34);
+            this.submenuCheckIn.Size = new System.Drawing.Size(180, 22);
             this.submenuCheckIn.Text = "Nueva Reservación";
             this.submenuCheckIn.Click += new System.EventHandler(this.submenuCheckIn_Click);
             // 
             // submenuCheckOut
             // 
             this.submenuCheckOut.Name = "submenuCheckOut";
-            this.submenuCheckOut.Size = new System.Drawing.Size(270, 34);
+            this.submenuCheckOut.Size = new System.Drawing.Size(180, 22);
             this.submenuCheckOut.Text = "Salida y Facturación";
+            this.submenuCheckOut.Click += new System.EventHandler(this.submenuCheckOut_Click);
             // 
             // menuHabitaciones
             // 
@@ -90,21 +91,22 @@
             this.submenuEstadoHabitaciones,
             this.submenuConsumos});
             this.menuHabitaciones.Name = "menuHabitaciones";
-            this.menuHabitaciones.Size = new System.Drawing.Size(130, 29);
+            this.menuHabitaciones.Size = new System.Drawing.Size(88, 22);
             this.menuHabitaciones.Text = "Habitaciones";
             // 
             // submenuEstadoHabitaciones
             // 
             this.submenuEstadoHabitaciones.Name = "submenuEstadoHabitaciones";
-            this.submenuEstadoHabitaciones.Size = new System.Drawing.Size(386, 34);
+            this.submenuEstadoHabitaciones.Size = new System.Drawing.Size(255, 22);
             this.submenuEstadoHabitaciones.Text = "Estado de Habitaciones / Limpieza";
             this.submenuEstadoHabitaciones.Click += new System.EventHandler(this.submenuEstadoHabitaciones_Click);
             // 
             // submenuConsumos
             // 
             this.submenuConsumos.Name = "submenuConsumos";
-            this.submenuConsumos.Size = new System.Drawing.Size(386, 34);
+            this.submenuConsumos.Size = new System.Drawing.Size(255, 22);
             this.submenuConsumos.Text = "Cargar Consumo a Habitación";
+            this.submenuConsumos.Click += new System.EventHandler(this.submenuConsumos_Click);
             // 
             // menuCatalogos
             // 
@@ -112,20 +114,20 @@
             this.submenuClientes,
             this.submenuServicios});
             this.menuCatalogos.Name = "menuCatalogos";
-            this.menuCatalogos.Size = new System.Drawing.Size(108, 29);
+            this.menuCatalogos.Size = new System.Drawing.Size(72, 22);
             this.menuCatalogos.Text = "Catálogos";
             // 
             // submenuClientes
             // 
             this.submenuClientes.Name = "submenuClientes";
-            this.submenuClientes.Size = new System.Drawing.Size(270, 34);
+            this.submenuClientes.Size = new System.Drawing.Size(148, 22);
             this.submenuClientes.Text = "Clientes";
             this.submenuClientes.Click += new System.EventHandler(this.submenuClientes_Click);
             // 
             // submenuServicios
             // 
             this.submenuServicios.Name = "submenuServicios";
-            this.submenuServicios.Size = new System.Drawing.Size(270, 34);
+            this.submenuServicios.Size = new System.Drawing.Size(148, 22);
             this.submenuServicios.Text = "Servicios Extra";
             // 
             // menuAdmin
@@ -134,19 +136,19 @@
             this.submenuEmpleados,
             this.submenuPrecios});
             this.menuAdmin.Name = "menuAdmin";
-            this.menuAdmin.Size = new System.Drawing.Size(147, 29);
+            this.menuAdmin.Size = new System.Drawing.Size(100, 22);
             this.menuAdmin.Text = "Administración";
             // 
             // submenuEmpleados
             // 
             this.submenuEmpleados.Name = "submenuEmpleados";
-            this.submenuEmpleados.Size = new System.Drawing.Size(347, 34);
+            this.submenuEmpleados.Size = new System.Drawing.Size(230, 22);
             this.submenuEmpleados.Text = "Empleados y Roles";
             // 
             // submenuPrecios
             // 
             this.submenuPrecios.Name = "submenuPrecios";
-            this.submenuPrecios.Size = new System.Drawing.Size(347, 34);
+            this.submenuPrecios.Size = new System.Drawing.Size(230, 22);
             this.submenuPrecios.Text = "Tipos de Habitación y Precios";
             // 
             // statusStrip1
@@ -154,29 +156,27 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblUsuarioActual});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 660);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1200, 32);
+            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // lblUsuarioActual
             // 
             this.lblUsuarioActual.Name = "lblUsuarioActual";
-            this.lblUsuarioActual.Size = new System.Drawing.Size(157, 25);
+            this.lblUsuarioActual.Size = new System.Drawing.Size(105, 17);
             this.lblUsuarioActual.Text = "Usuario: -- | Rol: --";
             // 
             // FrmPrincipal
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FrmPrincipal";
             this.Text = "Sistema de Administración de Hotel";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
