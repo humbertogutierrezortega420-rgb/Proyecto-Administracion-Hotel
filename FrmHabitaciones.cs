@@ -10,11 +10,12 @@ using System.Windows.Forms;
 using System.Data.SQLite;
 
 namespace Proyecto_Administracion_Hotel
-{
+{   
     public partial class FrmHabitaciones : Form
     {
         string cadenaConexion = "Data Source=HotelDB.db;Version=3;";
-        int idHabitacionSeleccionada = 0;
+        private int idHabitacionSeleccionada = 0;
+        private string estadoActual = "";
         public FrmHabitaciones()
         {
             InitializeComponent();
@@ -22,25 +23,25 @@ namespace Proyecto_Administracion_Hotel
 
         private void FrmHabitaciones_Load(object sender, EventArgs e)
         {
-            CargarTiposHabitacion();
-            CargarHabitaciones();
+            cmbNuevoEstado.Items.AddRange(new string[] { "Disponible", "Limpieza", "Mantenimiento" });
+            CargarListaHabitaciones();
         }
-        private void CargarTiposHabitacion()
+        private void CargarListaHabitaciones()
         {
             using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
             {
                 try
                 {
                     conexion.Open();
-                    string query = "SELECT IdTipoHabitacion, NombreTipo FROM TiposHabitacion";
+                    string query = @"SELECT h.IdHabitacion, h.NumeroHabitacion AS 'Número', t.NombreTipo AS 'Tipo', h.Estado FROM Habitaciones h INNER JOIN TiposHabitacion t ON h.IdTipoHabitacion = t.IdTipoHabitacion ORDER BY h.NumeroHabitacion";
                     SQLiteDataAdapter adaptador = new SQLiteDataAdapter(query, conexion);
                     DataTable dt = new DataTable();
                     adaptador.Fill(dt);
 
                    
-                    cmbTipo.DataSource = dt;
-                    cmbTipo.DisplayMember = "NombreTipo"; 
-                    cmbTipo.ValueMember = "IdTipoHabitacion";
+                    dgvHabitaciones.DataSource = dt;
+                    dgvHabitaciones.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dgvHabitaciones.Columns["IdHabitacion"].Visible = false;
                 }
                 catch (Exception ex)
                 {
@@ -50,151 +51,73 @@ namespace Proyecto_Administracion_Hotel
         }
 
        
-        private void CargarHabitaciones()
-        {
-            using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
-            {
-                try
-                {
-                    conexion.Open();
-          
-                    string query = @"SELECT h.IdHabitacion, h.NumeroHabitacion, t.NombreTipo, h.Estado 
-                                     FROM Habitaciones h
-                                     INNER JOIN TiposHabitacion t ON h.IdTipoHabitacion = t.IdTipoHabitacion";
-
-                    SQLiteDataAdapter adaptador = new SQLiteDataAdapter(query, conexion);
-                    DataTable dt = new DataTable();
-                    adaptador.Fill(dt);
-                    dgvHabitaciones.DataSource = dt;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al cargar habitaciones: " + ex.Message);
-                }
-            }
-        }
-
         private void dgvHabitaciones_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if(e.RowIndex >= 0)
             {
                 DataGridViewRow fila = dgvHabitaciones.Rows[e.RowIndex];
-
                 idHabitacionSeleccionada = Convert.ToInt32(fila.Cells["IdHabitacion"].Value);
+                estadoActual = fila.Cells["Estado"].Value.ToString();
 
-                txtNumero.Text = fila.Cells["NumeroHabitacion"].Value.ToString();
+                txtHabitacionSeleccionada.Text = fila.Cells["Número"].Value.ToString();
 
-       
-                cmbTipo.Text = fila.Cells["NombreTipo"].Value.ToString();
-                cmbEstado.Text = fila.Cells["Estado"].Value.ToString();
+                if (estadoActual == "Ocupada")
+                {
+                    cmbNuevoEstado.Enabled = false;
+                    btnActualizarEstado.Enabled = false;
+                    lblAviso.Text = "No se puede cambiar el estado de una habitación ocupada.";
+                    cmbNuevoEstado.SelectedIndex = -1;
+                }
+                else
+                {
+                    cmbNuevoEstado.Enabled = true;
+                    btnActualizarEstado.Enabled = true;
+                    lblAviso.Text = "";
+                    cmbNuevoEstado.SelectedItem = estadoActual;
+                }
+                
             }
+         
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
+        private void btnActualizarEstado_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNumero.Text) || cmbTipo.SelectedValue == null || string.IsNullOrWhiteSpace(cmbEstado.Text))
+            if(idHabitacionSeleccionada == 0)
             {
-                MessageBox.Show("Por favor, llene todos los campos (Número, Tipo y Estado).", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+               MessageBox.Show("Seleccione una habitación de la tabla para actualizar su estado.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if(cmbNuevoEstado.SelectedIndex == -1)
+            {
+                MessageBox.Show("Seleccione un nuevo estado para la habitación.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            string nuevoEstado = cmbNuevoEstado.SelectedItem.ToString();
 
-            using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
+            if (nuevoEstado == estadoActual)
+            {
+                MessageBox.Show("El nuevo estado seleccionado es el mismo que el estado actual.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            using(SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
             {
                 try
                 {
                     conexion.Open();
-                    string query = "INSERT INTO Habitaciones (IdTipoHabitacion, NumeroHabitacion, Estado) VALUES (@idTipo, @numero, @estado)";
-
+                    string query = "UPDATE Habitaciones SET Estado = @estado WHERE IdHabitacion = @id";
                     using (SQLiteCommand comando = new SQLiteCommand(query, conexion))
                     {
-                        comando.Parameters.AddWithValue("@idTipo", Convert.ToInt32(cmbTipo.SelectedValue));
-                        comando.Parameters.AddWithValue("@numero", txtNumero.Text);
-                        comando.Parameters.AddWithValue("@estado", cmbEstado.Text);
-
-                        comando.ExecuteNonQuery();
-                        MessageBox.Show("Habitación guardada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        LimpiarCampos();
-                        CargarHabitaciones(); 
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al guardar. Es posible que este número de habitación ya exista. Detalles: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void btnEditar_Click(object sender, EventArgs e)
-        {
-            if (idHabitacionSeleccionada == 0)
-            {
-                MessageBox.Show("Seleccione una habitación de la tabla para modificar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
-            {
-                try
-                {
-                    conexion.Open();
-                    string query = "UPDATE Habitaciones SET IdTipoHabitacion = @idTipo, NumeroHabitacion = @numero, Estado = @estado WHERE IdHabitacion = @id";
-
-                    using (SQLiteCommand comando = new SQLiteCommand(query, conexion))
-                    {
-                        comando.Parameters.AddWithValue("@idTipo", Convert.ToInt32(cmbTipo.SelectedValue));
-                        comando.Parameters.AddWithValue("@numero", txtNumero.Text);
-                        comando.Parameters.AddWithValue("@estado", cmbEstado.Text);
+                        comando.Parameters.AddWithValue("@estado", nuevoEstado);
                         comando.Parameters.AddWithValue("@id", idHabitacionSeleccionada);
-
                         comando.ExecuteNonQuery();
-                        MessageBox.Show("Habitación actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                        MessageBox.Show("Estado de la habitación actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         LimpiarCampos();
-                        CargarHabitaciones();
+                        CargarListaHabitaciones();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al actualizar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void btnEliminar_Click(object sender, EventArgs e)
-        {
-            if (idHabitacionSeleccionada == 0)
-            {
-                MessageBox.Show("Seleccione una habitación de la tabla para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            DialogResult confirmacion = MessageBox.Show("¿Está seguro de que desea eliminar esta habitación?", "Confirmar Eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (confirmacion == DialogResult.Yes)
-            {
-                using (SQLiteConnection conexion = new SQLiteConnection(cadenaConexion))
-                {
-                    try
-                    {
-                        conexion.Open();
-                        string query = "DELETE FROM Habitaciones WHERE IdHabitacion = @id";
-
-                        using (SQLiteCommand comando = new SQLiteCommand(query, conexion))
-                        {
-                            comando.Parameters.AddWithValue("@id", idHabitacionSeleccionada);
-                            comando.ExecuteNonQuery();
-
-                            MessageBox.Show("Habitación eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            LimpiarCampos();
-                            CargarHabitaciones();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("No se puede eliminar la habitación porque tiene historial de reservaciones asociado. Detalles: " + ex.Message, "Error de Integridad", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show("Error al actualizar el estado: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -206,11 +129,15 @@ namespace Proyecto_Administracion_Hotel
 
         private void LimpiarCampos()
         {
-            txtNumero.Clear();
-            cmbTipo.SelectedIndex = -1; 
-            cmbEstado.SelectedIndex = -1; 
-            idHabitacionSeleccionada = 0; 
-            txtNumero.Focus(); 
+            idHabitacionSeleccionada = 0;
+            estadoActual = "";
+            txtHabitacionSeleccionada.Clear(); 
+            cmbNuevoEstado.SelectedIndex = -1; 
+            cmbNuevoEstado.Enabled = true;
+            btnActualizarEstado.Enabled = true;
+            
+            if(lblAviso != null)lblAviso.Text = "";
+            
         }
     }
 }

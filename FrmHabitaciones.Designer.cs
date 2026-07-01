@@ -28,84 +28,53 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtNumero = new System.Windows.Forms.TextBox();
-            this.cmbTipo = new System.Windows.Forms.ComboBox();
-            this.cmbEstado = new System.Windows.Forms.ComboBox();
-            this.btnGuardar = new System.Windows.Forms.Button();
-            this.btnEditar = new System.Windows.Forms.Button();
-            this.btnEliminar = new System.Windows.Forms.Button();
+            this.txtHabitacionSeleccionada = new System.Windows.Forms.TextBox();
+            this.cmbNuevoEstado = new System.Windows.Forms.ComboBox();
+            this.btnActualizarEstado = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.dgvHabitaciones = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblAviso = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHabitaciones)).BeginInit();
             this.SuspendLayout();
             // 
-            // txtNumero
+            // txtHabitacionSeleccionada
             // 
-            this.txtNumero.Location = new System.Drawing.Point(198, 34);
-            this.txtNumero.Name = "txtNumero";
-            this.txtNumero.Size = new System.Drawing.Size(100, 20);
-            this.txtNumero.TabIndex = 0;
+            this.txtHabitacionSeleccionada.Location = new System.Drawing.Point(264, 42);
+            this.txtHabitacionSeleccionada.Margin = new System.Windows.Forms.Padding(4);
+            this.txtHabitacionSeleccionada.Name = "txtHabitacionSeleccionada";
+            this.txtHabitacionSeleccionada.ReadOnly = true;
+            this.txtHabitacionSeleccionada.Size = new System.Drawing.Size(132, 22);
+            this.txtHabitacionSeleccionada.TabIndex = 0;
             // 
-            // cmbTipo
+            // cmbNuevoEstado
             // 
-            this.cmbTipo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTipo.FormattingEnabled = true;
-            this.cmbTipo.Location = new System.Drawing.Point(177, 135);
-            this.cmbTipo.Name = "cmbTipo";
-            this.cmbTipo.Size = new System.Drawing.Size(121, 21);
-            this.cmbTipo.TabIndex = 1;
+            this.cmbNuevoEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNuevoEstado.FormattingEnabled = true;
+            this.cmbNuevoEstado.Location = new System.Drawing.Point(236, 166);
+            this.cmbNuevoEstado.Margin = new System.Windows.Forms.Padding(4);
+            this.cmbNuevoEstado.Name = "cmbNuevoEstado";
+            this.cmbNuevoEstado.Size = new System.Drawing.Size(160, 24);
+            this.cmbNuevoEstado.TabIndex = 1;
             // 
-            // cmbEstado
+            // btnActualizarEstado
             // 
-            this.cmbEstado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEstado.FormattingEnabled = true;
-            this.cmbEstado.Items.AddRange(new object[] {
-            "Disponible",
-            "Ocupada",
-            "Mantenimiento"});
-            this.cmbEstado.Location = new System.Drawing.Point(177, 202);
-            this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(121, 21);
-            this.cmbEstado.TabIndex = 2;
-            // 
-            // btnGuardar
-            // 
-            this.btnGuardar.Location = new System.Drawing.Point(344, 254);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(75, 23);
-            this.btnGuardar.TabIndex = 3;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = true;
-            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            // 
-            // btnEditar
-            // 
-            this.btnEditar.Location = new System.Drawing.Point(344, 296);
-            this.btnEditar.Name = "btnEditar";
-            this.btnEditar.Size = new System.Drawing.Size(75, 23);
-            this.btnEditar.TabIndex = 4;
-            this.btnEditar.Text = "Editar";
-            this.btnEditar.UseVisualStyleBackColor = true;
-            this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.Location = new System.Drawing.Point(677, 254);
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(75, 23);
-            this.btnEliminar.TabIndex = 5;
-            this.btnEliminar.Text = "Eliminar";
-            this.btnEliminar.UseVisualStyleBackColor = true;
-            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            this.btnActualizarEstado.Location = new System.Drawing.Point(903, 313);
+            this.btnActualizarEstado.Margin = new System.Windows.Forms.Padding(4);
+            this.btnActualizarEstado.Name = "btnActualizarEstado";
+            this.btnActualizarEstado.Size = new System.Drawing.Size(100, 28);
+            this.btnActualizarEstado.TabIndex = 5;
+            this.btnActualizarEstado.Text = "Actualizar";
+            this.btnActualizarEstado.UseVisualStyleBackColor = true;
+            this.btnActualizarEstado.Click += new System.EventHandler(this.btnActualizarEstado_Click);
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(677, 296);
+            this.btnLimpiar.Location = new System.Drawing.Point(903, 364);
+            this.btnLimpiar.Margin = new System.Windows.Forms.Padding(4);
             this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
+            this.btnLimpiar.Size = new System.Drawing.Size(100, 28);
             this.btnLimpiar.TabIndex = 6;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.UseVisualStyleBackColor = true;
@@ -114,55 +83,57 @@
             // dgvHabitaciones
             // 
             this.dgvHabitaciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvHabitaciones.Location = new System.Drawing.Point(344, 34);
+            this.dgvHabitaciones.Location = new System.Drawing.Point(459, 42);
+            this.dgvHabitaciones.Margin = new System.Windows.Forms.Padding(4);
             this.dgvHabitaciones.Name = "dgvHabitaciones";
-            this.dgvHabitaciones.Size = new System.Drawing.Size(408, 214);
+            this.dgvHabitaciones.RowHeadersWidth = 51;
+            this.dgvHabitaciones.Size = new System.Drawing.Size(544, 263);
             this.dgvHabitaciones.TabIndex = 7;
             this.dgvHabitaciones.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHabitaciones_CellClick);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(65, 40);
+            this.label1.Location = new System.Drawing.Point(87, 49);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(116, 13);
+            this.label1.Size = new System.Drawing.Size(162, 16);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Numero de Habitacion:";
+            this.label1.Text = "Habitacion Seleccionada:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(65, 138);
+            this.label2.Location = new System.Drawing.Point(146, 169);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 13);
+            this.label2.Size = new System.Drawing.Size(53, 16);
             this.label2.TabIndex = 9;
-            this.label2.Text = "Tipo de Habitacion:";
+            this.label2.Text = "Estado:";
             // 
-            // label3
+            // lblAviso
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(92, 209);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(43, 13);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Estado:";
+            this.lblAviso.AutoSize = true;
+            this.lblAviso.Location = new System.Drawing.Point(459, 324);
+            this.lblAviso.Name = "lblAviso";
+            this.lblAviso.Size = new System.Drawing.Size(10, 16);
+            this.lblAviso.TabIndex = 10;
+            this.lblAviso.Text = ".";
             // 
             // FrmHabitaciones
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label3);
+            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.lblAviso);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dgvHabitaciones);
             this.Controls.Add(this.btnLimpiar);
-            this.Controls.Add(this.btnEliminar);
-            this.Controls.Add(this.btnEditar);
-            this.Controls.Add(this.btnGuardar);
-            this.Controls.Add(this.cmbEstado);
-            this.Controls.Add(this.cmbTipo);
-            this.Controls.Add(this.txtNumero);
+            this.Controls.Add(this.btnActualizarEstado);
+            this.Controls.Add(this.cmbNuevoEstado);
+            this.Controls.Add(this.txtHabitacionSeleccionada);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmHabitaciones";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestión de Habitaciones";
@@ -175,16 +146,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtNumero;
-        private System.Windows.Forms.ComboBox cmbTipo;
-        private System.Windows.Forms.ComboBox cmbEstado;
-        private System.Windows.Forms.Button btnGuardar;
-        private System.Windows.Forms.Button btnEditar;
-        private System.Windows.Forms.Button btnEliminar;
+        private System.Windows.Forms.TextBox txtHabitacionSeleccionada;
+        private System.Windows.Forms.ComboBox cmbNuevoEstado;
+        private System.Windows.Forms.Button btnActualizarEstado;
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.DataGridView dgvHabitaciones;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblAviso;
     }
 }
