@@ -16,7 +16,7 @@ namespace Proyecto_Administracion_Hotel
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmHabitaciones());
+            Application.Run(new FrmLogin());
         }
     }
 }
