@@ -93,6 +93,12 @@
     <Compile Include="FrmReservaciones.Designer.cs">
       <DependentUpon>FrmReservaciones.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmServiciosExtras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmServiciosExtras.Designer.cs">
+      <DependentUpon>FrmServiciosExtras.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmTiposHabitacion.cs">
       <SubType>Form</SubType>
     </Compile>
